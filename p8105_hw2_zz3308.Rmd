@@ -132,42 +132,48 @@ There are `r ada_compliant_stations_A` that are ADA compliant of the stations th
 **Mrs Trash Wheel**
 
 ```{r, message=FALSE}
-mr_trash_wheel <- read_excel("hw2_data/202309 Trash Wheel Collection Data.xlsx", 
+mr_trash_wheel <- read_excel("hw2_data/202409 Trash Wheel Collection Data.xlsx", 
                              sheet = "Mr. Trash Wheel") %>%
   clean_names() %>%
   select(-starts_with("X")) %>%
   filter(!is.na(dumpster)) %>%
   mutate(sports_balls = as.integer(round(as.numeric(sports_balls), 0)), 
          trash_wheel = "Mr. Trash Wheel") 
+
+head(mr_trash_wheel)
 ```
 
 **Professor Trash Wheel**
 
 ```{r}
-prof_trash_wheel <- read_excel("hw2_data/202309 Trash Wheel Collection Data.xlsx", 
+prof_trash_wheel <- read_excel("hw2_data/202409 Trash Wheel Collection Data.xlsx", 
                                sheet = "Professor Trash Wheel") %>%
   clean_names() %>%
   filter(!is.na(dumpster)) %>%
   mutate(year = as.character(year),
          trash_wheel = "Professor Trash Wheel")
+
+head(prof_trash_wheel)
 ```
 
 **Gwynnda Trash Wheel**
 
 ```{r}
-gwynnda_trash_wheel <- read_excel("hw2_data/202309 Trash Wheel Collection Data.xlsx", 
+gwynnda_trash_wheel <- read_excel("hw2_data/202409 Trash Wheel Collection Data.xlsx", 
                                   sheet = "Gwynnda Trash Wheel") %>%
   clean_names() %>%
   filter(!is.na(dumpster)) %>%
   mutate(year = as.character(year),
          trash_wheel = "Gwynnda Trash Wheel")  
+
+head(gwynnda_trash_wheel)
 ```
 
 **Combined dataset**
 
 ```{r}
 combined_trash_wheel_data <- bind_rows(mr_trash_wheel, prof_trash_wheel, gwynnda_trash_wheel)
-print(combined_trash_wheel_data)
+head(combined_trash_wheel_data)
 ```
 
 The combined trash wheel dataset contains a total of `r nrow(combined_trash_wheel_data)` observations, merging data from Mr. Trash Wheel, Professor Trash Wheel, and Gwynnda Trash Wheel. The dataset consists of `r nrow(mr_trash_wheel)` observations from Mr. Trash Wheel, `r nrow(prof_trash_wheel)` from Professor Trash Wheel, and `r nrow(gwynnda_trash_wheel)` from Gwynnda Trash Wheel. Key variables in this dataset include `year`, `month`, and `date`, which indicate the time period when each observation was recorded, and `dumpster`, which represents the dumpster number used for each trash collection; `weight_tons`, showing the total weight of trash collected in tons; and `plastic_bottles`, which indicates the number of plastic bottles collected during each trash collection. Additionally, `cigarette_butts` counts the total number of cigarette butts collected, while `sports_balls` captures the number of sports balls found. Another significant variable is `homes_powered`, which estimates the number of homes that could be powered by the energy generated from the collected trash. 
