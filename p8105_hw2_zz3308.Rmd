@@ -2,7 +2,7 @@
 title: "hw2"
 author: "Zitao Zhang"
 date: "`r Sys.Date()`"
-output: pdf_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -26,7 +26,7 @@ nyc_transit_data <- read.csv("hw2_data/NYC_Transit_Subway_Entrance_And_Exit_Data
 nyc_transit_cleaned <- nyc_transit_data %>%
   select(Line, Station.Name, Station.Latitude, Station.Longitude, 
          Route1, Route2, Route3, Route4, Route5, Route6, Route7, Route8, 
-         Entry, Vending, Entrance.Type, ADA) %>%
+         Route9, Route10, Route11, Entry, Vending, Entrance.Type, ADA) %>%
   clean_names()
 
 # Convert "entry"
@@ -34,12 +34,12 @@ nyc_transit_cleaned <- nyc_transit_cleaned %>%
   mutate(entry = ifelse(entry == "YES", TRUE, FALSE))
 ```
 
-The cleaned dataset contains 16 columns and 1,868 rows. The variables include:
+The cleaned dataset contains `r ncol(nyc_transit_cleaned)` columns and `r nrow(nyc_transit_cleaned)` rows. The variables include:
 
 **line:** The subway line serving the station\
 **station_name:** The name of the station\
 **station_latitude / station_longitude:** Geographical coordinates of the station\
-**route1 to route8:** The subway routes serving the station\
+**route1 to route11:** The subway routes serving the station\
 **entry:** Indicates whether entry is allowed at this entrance (converted to a logical variable: True for "YES," False for "NO")\
 **vending:** Describes whether vending machines are present\
 **entrance_type:** Type of entrance\
@@ -91,13 +91,13 @@ There is the proportion of `r proportion_no_vending_entry` station entrances / e
 ```{r}
 # Make all route columns are of the same data type (character)
 nyc_transit_cleaned <- nyc_transit_cleaned %>%
-  mutate(across(route1:route8, as.character))
+  mutate(across(route1:route11, as.character))
 
 # Reformat data
 nyc_transit_routes = 
   pivot_longer(
     nyc_transit_cleaned, 
-    route1:route8,
+    route1:route11,
     names_to = "route_number", 
     values_to = "route_name")
 ```
@@ -306,8 +306,13 @@ viewers <- viewers %>% clean_names()
 head(viewers, 10)
 
 # Calculate the average viewership for Season 1 and Season 5
-avg_viewership_season1 <- mean(viewers$series_1, na.rm = TRUE)
-avg_viewership_season5 <- mean(viewers$series_5, na.rm = TRUE)
+avg_viewership_season1 <- viewers %>%
+  pull(series_1) %>%
+  mean(na.rm = TRUE)
+
+avg_viewership_season5 <- viewers %>%
+  pull(series_5) %>%
+  mean(na.rm = TRUE)
 
 # Display the average viewership results
 avg_viewership_season1
